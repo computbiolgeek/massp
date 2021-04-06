@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Last updated on Sat Apr  3 22:50:17 2021
-
-@author: Bian
-"""
-
+#!/usr/bin/env python3
 
 import os
 import random
