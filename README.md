@@ -66,6 +66,20 @@ python ../massp/massp.py -q 2yevB.fasta -p 2yevB.pssm --cnn-model ../models/fina
 # 4c00A
 python ../massp/massp.py -q 4c00A.fasta -p 4c00A.pssm --cnn-model ../models/final_cnn_model.h5 --lstm-model ../models/final_lstm_model.h5 --tokenizer ../models/tokenizer.pickle --output-prefix 4c00A
 ```
+Then run the following command to compute performance metrics.
+```bash
+# remove unresolved residues in the structure
+python ../scripts/process_sse_prediction.py ../ciphipsi/2yevB.ciphipsi 2yevB_predicted_sse.fasta 2yevB
+python ../scripts/process_sse_prediction.py ../ciphipsi/4c00A.ciphipsi 4c00A_predicted_sse.fasta 4c00A
+
+# run SOV_refine.pl to compute performance metrics
+perl ../scripts/SOV_refine.pl 2yevB_true_sse.fasta 2yevB_processed_sse.fasta
+perl ../scripts/SOV_refine.pl 4c00A_true_sse.fasta 4c00A_processed_sse.fasta
+```
+
 
 ## References
-To be added ...
+### MASSP
+* Li, Bian and Mendenhall, Jeffrey and Capra, John A. and Meiler, Jens, A multi-task deep-learning system for predicting membrane associations and secondary structures of proteins, 2020, doi:10.1101/2020.12.02.409045
+### SOV_refine
+* Liu, T. and Z. Wang, SOV_refine: A further refined definition of segment overlap score and its significance for protein structure similarity. Source Code Biol Med, 2018. 13: p. 1.
