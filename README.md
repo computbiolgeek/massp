@@ -6,6 +6,7 @@ MASSP stands for Membrane Association and Secondary Structure Prediction. It is 
 MASSP depends the following external software packages to generate multiple sequence alignments (MSA) and position-specific-scoring matrices.
   * HHblits
   * The BioChemical Library (BCL)
+
 It was developed and tested under the following Python/Keras/TensforFlow environment.
   * Keras 2.3.1 with TensorFlow 2.0.0 as the backend.
   * Python 3.7
