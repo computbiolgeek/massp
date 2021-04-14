@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import numpy as np
+import pickle
 from argparse import ArgumentParser
 from tensorflow.keras import models
 from tensorflow.keras.preprocessing import sequence
-from tensorflow.keras.preprocessing import text
 
 
 def parse_cmd_args():
@@ -20,6 +20,10 @@ def parse_cmd_args():
         help='''Input file containing the tokens.'''
     )
     parser.add_argument(
+        '-t', '--tokenizer', dest='tokenizer', required=True, type=str,
+        help='''Path to the LSTM model.'''
+    )
+    parser.add_argument(
         '-m', '--model', dest='model', required=True, type=str,
         help='''Path to the LSTM model.'''
     )
@@ -33,8 +37,9 @@ def main():
         token_list = [line.strip() for line in ipf]
 
     # tokenize test texts
-    tokenizer = text.Tokenizer(num_words=54)
-    tokenizer.fit_on_texts(token_list)
+    with open(cmd_args.tokenizer, 'rb') as ipf:
+        tokenizer = tokenizer = pickle.load(ipf)
+    # tokenizer.fit_on_texts(token_list)
     sequences = tokenizer.texts_to_sequences(token_list)
     X = sequence.pad_sequences(sequences, maxlen=1000)
 

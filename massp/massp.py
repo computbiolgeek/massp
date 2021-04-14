@@ -16,18 +16,18 @@ We're currently preparing a manuscript on this method.
 
 import os
 import sys
+import pickle
 from argparse import ArgumentParser
 
 import numpy as np
 from tensorflow.keras import models
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import Tokenizer
 
 # global variables
-SEQ_DB = 'uniprot20_2016_02/uniprot_2016_02'
-HHBLITS = 'hhblits'
-REFORMAT = '~/hh-suite/scripts/reformat.pl'
-BCL = 'bcl-apps-static.exe'
+# SEQ_DB = os.environ['SEQ_DB']
+# HHBLITS = os.environ['HHBLITS']
+# REFORMAT = os.environ['REFORMAT']
+# BCL = os.environ['BCL']
 
 
 def run_hhblits(fasta_file, prefix, ncpu='1'):
@@ -54,8 +54,6 @@ def run_hhblits(fasta_file, prefix, ncpu='1'):
         '-d', SEQ_DB,
         '-e', '0.001',
         '-n', '2',
-        '-cov', '50',
-        '-id', '90',
         '-diff', 'inf',
         'realign_max', '500000',
         '-pre_evalue_thresh', '0.01',
@@ -171,7 +169,7 @@ def convert_to_fasta(string, width=60):
     Parameters
     ----------
     string : str
-        A string that is the output from the CNN model.
+        A string that is the output from the 2D-CNN model.
     width : int, optional
         Customizable line width for the FASTA format. 
         The default is 60.
@@ -188,6 +186,31 @@ def convert_to_fasta(string, width=60):
         fasta_formatted.append(string[i * width:(i + 1) * width])
     fasta_formatted.append(string[n_lines * width:])
     return '\n'.join(fasta_formatted)
+
+
+def post_process_sse(sse_pred):
+    """
+    Remove potential noise in secondary structure elements predicted
+    by a trained 2D-CNN.
+
+    Parameters
+    ----------
+    sse_pred : str
+        Secondary structure elements predicted by the 2D-CNN.
+
+    Returns
+    -------
+    str
+        Denoised predicted secondary structure elements.
+
+    """
+    for p in ['CHC', 'CCHHCC', 'CEC', 'CCEECC']:
+        sse_pred = sse_pred.replace(p, 'C' * len(p))
+    for p in ['HCH']:
+        sse_pred = sse_pred.replace(p, 'H' * len(p))
+    for p in ['ECE', 'EECCEE']:
+        sse_pred = sse_pred.replace(p, 'E' * len(p))
+    return sse_pred
 
 
 def parse_loc_pred(loc_pred):
@@ -395,6 +418,10 @@ def parse_cmd_args():
         and trained to predict what protein class the sequence belongs to.'''
     )
     parser.add_argument(
+        '--tokenizer', dest='tokenizer', type=str, required=True,
+        help='''Tokenizer saved from fitting on training set tokens.'''
+    )
+    parser.add_argument(
         '--output-prefix', '-o', dest='prefix', type=str, required=False,
         default='out', help='''Prefix that will be prepended to the filenames
         of all output files.'''
@@ -444,6 +471,7 @@ def main():
     pred_tops = ''.join([top[i] for i in np.argmax(top_prob, axis=1)])
 
     # post-process predicted residue locations and topologies
+    pred_sses = post_process_sse(pred_sses)
     pred_locs = post_process_loc(pred_locs)
     pred_tops = post_process_top(pred_tops)
 
@@ -453,8 +481,8 @@ def main():
     sentence = [' '.join(combined_predictions)]
 
     # tokenize test texts
-    tokenizer = Tokenizer(num_words=54)
-    tokenizer.fit_on_texts(sentence)
+    with open(cmd_args.tokenizer, 'rb') as ipf:
+        tokenizer = pickle.load(ipf)
     sequences = tokenizer.texts_to_sequences(sentence)
     X = pad_sequences(sequences, maxlen=1000)
 

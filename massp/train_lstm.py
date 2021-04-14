@@ -3,6 +3,7 @@
 import os
 import  numpy as np
 import argparse
+import pickle
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.layers import Dense, Embedding, LSTM
@@ -93,6 +94,10 @@ def main():
     data = pad_sequences(sequences, maxlen=maxlen)
     print('Shape of data tensor', data.shape)
     
+    # save tokenizer
+    with open('tokenizer.pickle', 'wb') as opf:
+        pickle.dump(tokenizer, opf, protocol=pickle.HIGHEST_PROTOCOL)
+
     # tokenize validation texts
     val_tokenizer = Tokenizer(num_words=max_features)
     val_tokenizer.fit_on_texts(val_texts)
