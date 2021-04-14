@@ -57,5 +57,15 @@ conda install keras==2.3.1
 conda install tensorflow==2.0.0
 ```
 
+### Run examples
+Change to the `examples/` subdirectory to run the following two examples. You do not need to have HHblits or the BCL configured to run these examples. The position-specific-scoring matrices for them have been pre-computed and provided. However, you do need to configure the Python/Keras/TensorFlow environment. In addition, lines 27-30 in `massp.py` will needed to be commented out.
+```bash
+# 2yevB
+python ../massp/massp.py -q 2yevB.fasta -p 2yevB.pssm --cnn-model ../models/final_cnn_model.h5 --lstm-model ../models/final_lstm_model.h5 --tokenizer ../models/tokenizer.pickle --output-prefix 2yevB
+
+# 4c00A
+python ../massp/massp.py -q 4c00A.fasta -p 4c00A.pssm --cnn-model ../models/final_cnn_model.h5 --lstm-model ../models/final_lstm_model.h5 --tokenizer ../models/tokenizer.pickle --output-prefix 4c00A
+```
+
 ## References
 To be added ...

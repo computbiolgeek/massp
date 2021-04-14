@@ -7,8 +7,8 @@ what protein class the input sequence belongs to. Thus, it is applicable to
 the whole proteome of any organism. Our benchmarking analysis indicates that
 MASSP has superior performance to some of the best existing methods: PSIPRED,
 NetSurfP-2.0, RaptorX-Property, SPINE-X, OCTOPUS, MEMSAT3, TMHMM2, BOCTOPUS,
-PRED-TMBB2, TOPCONS2, and TMP-SS.
-We're currently preparing a manuscript on this method.
+PRED-TMBB2, TOPCONS2, and TMP-SS. We're currently preparing a manuscript on 
+this method.
 
 @author: Bian Li
 @email: bian.li@vanderbilt.edu; comput.biol.geek@gmail.com
@@ -24,10 +24,10 @@ from tensorflow.keras import models
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # global variables
-# SEQ_DB = os.environ['SEQ_DB']
-# HHBLITS = os.environ['HHBLITS']
-# REFORMAT = os.environ['REFORMAT']
-# BCL = os.environ['BCL']
+SEQ_DB = os.environ['SEQ_DB']
+HHBLITS = os.environ['HHBLITS']
+REFORMAT = os.environ['REFORMAT']
+BCL = os.environ['BCL']
 
 
 def run_hhblits(fasta_file, prefix, ncpu='1'):
