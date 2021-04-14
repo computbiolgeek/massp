@@ -9,9 +9,11 @@ from tensorflow.keras.preprocessing import sequence
 
 def parse_cmd_args():
     """
+    Parse command-line arguments.
 
     Returns
     -------
+    Parsed command-line arguments.
 
     """
     parser = ArgumentParser()

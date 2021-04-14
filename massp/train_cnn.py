@@ -8,6 +8,7 @@ from tensorflow.keras import layers
 from tensorflow.keras import Input
 from tensorflow.keras import models
 from tensorflow.keras import optimizers
+from tensorflow.keras import callbacks
 
 
 def read_pssm(pssm_file):
@@ -237,7 +238,12 @@ def train_best_model(data_path, train_ids, validation_ids, model_path):
     val_y_loc = np.vstack([validation_y[i][1] for i in range(n_vals)])
     val_y_orient = np.vstack([validation_y[i][2] for i in range(n_vals)])
     val_y_top = np.vstack([validation_y[i][3] for i in range(n_vals)])
-
+    val_y = {
+        'sse': val_y_sse,
+        'loc': val_y_loc,
+        'orient': val_y_orient,
+        'top': val_y_top
+    }
 
     # instantiate a multi-output model
     input_tensor = Input(shape=(21, 20, 1))
@@ -266,12 +272,21 @@ def train_best_model(data_path, train_ids, validation_ids, model_path):
     )
     model.summary()
     
+    callbacks_list = [
+        callbacks.EarlyStopping(
+            monitor='val_loss',
+            patience=5
+        ),
+        callbacks.ModelCheckpoint(
+            filepath=os.path.join(model_path, 'final_cnn_model.h5'),
+            monitor='val_loss',
+            save_best_only=True
+        )
+    ]
+    
     model.compile(
         optimizer=optimizers.Adam(        
-            lr=0.001, 
-            beta_1=0.9, 
-            beta_2=0.999, 
-            amsgrad=False
+            learning_rate=0.0001
         ),
         loss=[
             'categorical_crossentropy',
@@ -286,29 +301,20 @@ def train_best_model(data_path, train_ids, validation_ids, model_path):
             'top': 'accuracy'
         }
     )
-
     
-    # create combined set after tuning hyperparameters
-    # retrain starting from the best model on validation set
-    X = np.concatenate((train_X_shuffled, val_X))
-    y_sse = np.concatenate((train_y_sse, val_y_sse))
-    y_loc = np.concatenate((train_y_loc, val_y_loc))
-    y_orient = np.concatenate((train_y_orient, val_y_orient))
-    y_top = np.concatenate((train_y_top, val_y_top))
-
-
     model.fit(
-        X,
+        train_X_shuffled,
         [
-            y_sse,
-            y_loc,
-            y_orient,
-            y_top
+            train_y_sse,
+            train_y_loc,
+            train_y_orient,
+            train_y_top
         ],
-        epochs=50,
-        batch_size=256,
+        epochs=100,
+        batch_size=64,
+        validation_data=(val_X, val_y),
+        callbacks=callbacks_list
     )
-    model.save(os.path.join(model_path, 'final_cnn_model.h5'))
     
 
 def parse_cmd_arguments():

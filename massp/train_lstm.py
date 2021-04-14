@@ -8,7 +8,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.layers import Dense, Embedding, LSTM
 from tensorflow.keras.models import Sequential
-from tensorflow.keras import optimizers
+from tensorflow.keras import optimizers, callbacks
 
 
 def parse_cmd_arguments():
@@ -116,12 +116,21 @@ def main():
     model.add(Dense(4, activation='softmax'))
     model.summary()
     
+    callbacks_list = [
+        callbacks.EarlyStopping(
+            monitor='val_loss',
+            patience=5
+        ),
+        callbacks.ModelCheckpoint(
+            filepath=os.path.join(model_path, 'final_lstm_model.h5'),
+            monitor='val_loss',
+            save_best_only=True
+        )
+    ]
+    
     model.compile(
         optimizer=optimizers.Adam(
-            lr=0.001, 
-            beta_1=0.9, 
-            beta_2=0.999, 
-            amsgrad=False
+            learning_rate=0.001
         ),
         loss='categorical_crossentropy', 
         metrics=['acc']
@@ -129,12 +138,13 @@ def main():
     
     # train the final model
     model.fit(
-        np.concatenate((x_train, x_val)), 
-        np.concatenate((y_train, y_val)), 
+        x_train, 
+        y_train, 
         epochs=20, 
-        batch_size=batch_size
+        batch_size=batch_size,
+        validation_data=(x_val, y_val),
+        callbacks=callbacks_list
       )
-    model.save(os.path.join(model_path, 'final_lstm_model.h5'))
 
 
 if __name__ == '__main__':
