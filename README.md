@@ -33,7 +33,7 @@ export REFORMAT="path to reformat.pl"
 ### Install and configure the BCL
 Follow the instructions [here](http://www.meilerlab.org/index.php/bclcommons/show/b_apps_id/1) to obtain and install the BCL locally. Then export the BCL for MASSP to run.
 ```bash
-exprot BCL="path to the bcl executable"
+export BCL="path to the bcl executable"
 ```
 
 ### Install TensorFlow and Keras
@@ -58,7 +58,7 @@ conda install tensorflow==2.0.0
 ```
 
 ### Run examples
-Change to the `examples/` subdirectory to run the following two examples. You do not need to have HHblits or the BCL configured to run these examples. The position-specific-scoring matrices for them have been pre-computed and provided. However, you do need to configure the Python/Keras/TensorFlow environment. In addition, lines 27-30 in `massp.py` will needed to be commented out.
+Change to the `examples/` subdirectory to run the following two examples. You do not need to have HHblits or the BCL configured to run these examples. The position-specific-scoring matrices for them have been pre-computed and provided. However, you do need to configure the Python/Keras/TensorFlow environment. In addition, lines 27-30 in `massp.py` will need to be commented out.
 ```bash
 # 2yevB
 python ../massp/massp.py -q 2yevB.fasta -p 2yevB.pssm --cnn-model ../models/final_cnn_model.h5 --lstm-model ../models/final_lstm_model.h5 --tokenizer ../models/tokenizer.pickle --output-prefix 2yevB
