@@ -6,7 +6,7 @@ MASSP stands for Membrane Association and Secondary Structure Prediction. It is 
 MASSP depends the following external software packages to generate multiple sequence alignments (MSA) and position-specific-scoring matrices.
   * HHblits
   * The BioChemical Library (BCL)
-It was developed and testing under the following Python/Keras/TensforFlow environment.
+It was developed and tested under the following Python/Keras/TensforFlow environment.
   * Keras 2.3.1 with TensorFlow 2.0.0 as the backend.
   * Python 3.7
 
@@ -17,11 +17,24 @@ git clone https://github.com/computbiolgeek/massp.git
 ```
 
 ## Running MASSP
-### Install and set up HHBlits
-To be added ...
+### Install and configure HHblits
+Follow the instructions [here](https://github.com/soedinglab/hh-suite) to install and configure HHblits. We used the UniRef20 database in this work, which can be downloaded [here](http://wwwuser.gwdg.de/~compbiol/data/hhsuite/databases/hhsuite_dbs/old-releases/). Then export the following environment variables for MASSP to run.
+```bash
+# path to sequence database
+export SEQ_DB="path to local UniRef20 database"
 
-### Install and set up BCL
-To be added ...
+# path to hhblits binary
+export HHBLITS="path to hhblits binary"
+
+# path to reformat.pl
+export REFORMAT="path to reformat.pl"
+```
+
+### Install and configure the BCL
+Follow the instructions [here](http://www.meilerlab.org/index.php/bclcommons/show/b_apps_id/1) to obtain and install the BCL locally. Then export the BCL for MASSP to run.
+```bash
+exprot BCL="path to the bcl executable"
+```
 
 ### Install TensorFlow and Keras
 There are many resources out there that one can follow to install TensorFlow and Keras. We found it easiest to install them with the Anaconda Python distribution.
