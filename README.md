@@ -81,6 +81,6 @@ perl ../scripts/SOV_refine.pl 4c00A_true_sse.fasta 4c00A_processed_sse.fasta
 
 ## References
 ### MASSP
-* Li, Bian and Mendenhall, Jeffrey and Capra, John A. and Meiler, Jens, A multi-task deep-learning system for predicting membrane associations and secondary structures of proteins, 2020, doi:10.1101/2020.12.02.409045
+* Li B, Mendenhall J, Capra JA, and Meiler J, A multi-task deep-learning method for predicting membrane associations and secondary structures of proteins, J. Proteome Res. 2021, 20, 8, 4089–4100, https://doi.org/10.1021/acs.jproteome.1c00410
 ### SOV_refine
 * Liu, T. and Z. Wang, SOV_refine: A further refined definition of segment overlap score and its significance for protein structure similarity. Source Code Biol Med, 2018. 13: p. 1.
