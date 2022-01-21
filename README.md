@@ -1,6 +1,6 @@
 # MASSP
 MASSP stands for Membrane Association and Secondary Structure Prediction. It is a general method for predicting secondary structure, transmembrane segment and topology, and residue orientation of proteins. MASSP was compared with several classic and state-of-the-art predictors and was shown to perform equally well as the best methods in the field while being generalized to different classes of proteins. If you find MASSP useful in your work, please consider citing the MASSP paper: 
-* Li, Bian and Mendenhall, Jeffrey and Capra, John A. and Meiler, Jens, A multi-task deep-learning system for predicting membrane associations and secondary structures of proteins, 2020, doi:10.1101/2020.12.02.409045
+* Li, Bian and Mendenhall, Jeffrey and Capra, John A. and Meiler, Jens, A multi-task deep-learning method for predicting membrane associations and secondary structures of proteins, J. Proteome Res. 2021, 20, 8, 4089–4100, https://doi.org/10.1021/acs.jproteome.1c00410
 
 ## Requirements
 MASSP depends the following external software packages to generate multiple sequence alignments (MSA) and position-specific-scoring matrices.
